@@ -1,12 +1,14 @@
 package com.amitycs.sandc;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MainMenuScreen implements Screen{
-	
+	SpriteBatch batch;
+	Button test;
 	@Override
 	public void show() {
-		
+		batch = new SpriteBatch();
 	}
 
 	@Override

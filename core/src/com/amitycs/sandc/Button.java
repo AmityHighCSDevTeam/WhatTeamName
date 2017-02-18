@@ -2,6 +2,7 @@ package com.amitycs.sandc;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Button {
 	public Texture texture;
@@ -27,6 +28,10 @@ public class Button {
 		this.yPosition = yPos;
 		this.width = width;
 		this.height = height;
+	}
+	
+	public void draw(SpriteBatch b) {
+		b.draw(texture, xPosition, yPosition, width, height);
 	}
 	
 	public boolean mousedOver() {
