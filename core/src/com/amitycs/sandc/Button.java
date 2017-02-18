@@ -16,7 +16,7 @@ public class Button {
 	}
 	
 	public Button(int xPos, int yPos, int width, int height, Texture t) {
-		setFields(xPos, yPos, width, height, null);
+		setFields(xPos, yPos, width, height, t);
 	}
 	
 	public Button(Texture t) {
@@ -28,6 +28,7 @@ public class Button {
 		this.yPosition = yPos;
 		this.width = width;
 		this.height = height;
+		this.texture = t;
 	}
 	
 	public void draw(SpriteBatch b) {
@@ -37,7 +38,7 @@ public class Button {
 	public boolean mousedOver() {
 		int x = Gdx.input.getX();
 		if (xPosition < x && x < xPosition + width){
-			int y =Gdx.input.getY();
+			int y = Gdx.graphics.getHeight() - Gdx.input.getY();
 			if (yPosition < y && y < yPosition + height)
 				return true;
 		}
