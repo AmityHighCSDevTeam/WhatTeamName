@@ -27,7 +27,7 @@ public class MainMenuScreen implements Screen{
 		batch.begin();{
 			int width = Gdx.graphics.getWidth();
 			int height = Gdx.graphics.getHeight();
-			batch.draw(title, width, y, width / 2, (height * 3) / 4);
+			batch.draw(title, width / 2 - width / 4, height - width / 8, width / 2, width / 8);
 			newGameButt.draw(batch);
 		}batch.end();
 		if (Gdx.input.justTouched()) clickEvents();
