@@ -21,6 +21,7 @@ public class NewGame {
 		}
 		
 	}
+	
 	private void settingUpTiles(){
 		//c = city/capital/castle - pick one!
 		tiles[1][5] = 'c';
