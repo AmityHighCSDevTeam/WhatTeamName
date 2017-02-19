@@ -27,7 +27,7 @@ public class Unit {
 				w = 3;
 				break;
 		}
-		switch (weapon) {
+		switch (armor) {
 			case "naked":
 				a = 0;
 				break;
