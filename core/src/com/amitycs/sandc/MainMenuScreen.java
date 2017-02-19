@@ -12,6 +12,12 @@ public class MainMenuScreen implements Screen{
 	SpriteBatch batch;
 	Button newGameButt;
 	Texture title;
+	private final SupplyAndConquer game;
+	
+	public MainMenuScreen(SupplyAndConquer game) {
+		this.game = game;
+	}
+	
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
@@ -37,7 +43,6 @@ public class MainMenuScreen implements Screen{
 	public void resize(int width, int height) {
 		final int halfWidth = width / 2;
 		cam.setToOrtho(false, width, height);
-		//cam.update();
 		batch.setProjectionMatrix(cam.combined);
 		newGameButt.modifySize(halfWidth / 2, -1);
 		newGameButt.modifySize(-1, newGameButt.width / 3);
@@ -56,18 +61,20 @@ public class MainMenuScreen implements Screen{
 
 	@Override
 	public void hide() {
-		
+		this.dispose();
 	}
 
 	@Override
 	public void dispose() {
-		
+		batch.dispose();
+		title.dispose();
+		newGameButt.dispose();
 	}
 	
 	//this method should only be run where a click happened
 	private void clickEvents() {
 		if (newGameButt.mousedOver()) {
-			//dothings
+			game.setScreen(new GameScreen(game, this));
 		}
 	}
 

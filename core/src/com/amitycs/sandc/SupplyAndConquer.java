@@ -13,7 +13,7 @@ public class SupplyAndConquer extends Game {
 
 	@Override
 	public void create() {
-		setScreen(new MainMenuScreen());
+		setScreen(new MainMenuScreen(this));
 	}
 	
 }

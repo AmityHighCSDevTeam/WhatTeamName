@@ -60,6 +60,10 @@ public class Button {
 		b.draw(texture, xPosition, yPosition, width, height);
 	}
 	
+	public void dispose() {
+		texture.dispose();
+	}
+	
 	public boolean mousedOver() {
 		int x = Gdx.input.getX();
 		if (xPosition < x && x < xPosition + width){
