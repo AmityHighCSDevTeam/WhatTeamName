@@ -2,7 +2,7 @@ package com.amitycs.sandc;
 
 public class BuildingType {
 	public String type;
-	public final float productionInterval;
+	public float productionInterval;
 	public BuildingType(String type) {
 		this.type = type;
 		switch (type) {

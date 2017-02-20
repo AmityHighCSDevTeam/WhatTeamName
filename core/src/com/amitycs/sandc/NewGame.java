@@ -33,17 +33,17 @@ public class NewGame {
 		//c = city/capital/castle - pick one!
 		tiles[1][5] = 'c';
 		//b = barracks
-		tiles[3][2] = 'b';
-		tiles[4][4] = 'b';
+		tiles[0][2] = 'b';
+		tiles[3][4] = 'b';
 		tiles[2][5] = 'b';
 		//s = smith/blacksmith
 		tiles[1][3] = 's';
-		tiles[4][8] = 's';
+		tiles[3][8] = 's';
 		tiles[0][0] = 's';
 		//f = farm
 		tiles[1][1] = 'f';
 		tiles[0][8] = 'f';
-		tiles[4][0] = 'f';
+		tiles[3][0] = 'f';
 	}
 	
 }
