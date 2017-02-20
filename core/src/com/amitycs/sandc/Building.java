@@ -31,6 +31,14 @@ public class Building {
 	}
 	
 	public void tick() {
-		this.productionCounter += type.
+		this.productionCounter += type.productionSpeed * this.productionSpeedMultiplier;
+		if (this.productionCounter >= type.productionInterval && type.type != "castle" && type.type != "baracks") {
+			produce();
+		}
+		
+	}
+	
+	public void produce() {
+		//code to make a things
 	}
 }
