@@ -7,6 +7,7 @@ public class Building {
 	public float productionSpeedMultiplier;
 	public float productionBatchMultiplier;
 	public Map parent;
+	public float health;
 	
 	public Building(String type, boolean team, Map parent) {
 		this.parent = parent;
@@ -34,11 +35,27 @@ public class Building {
 		this.productionCounter += type.productionSpeed * this.productionSpeedMultiplier;
 		if (this.productionCounter >= type.productionInterval && type.type != "castle" && type.type != "baracks") {
 			produce();
+			this.productionCounter -= type.productionInterval;
+			this.productionBatchMultiplier += Const.BUILDING_GROWTH_FACTOR_SIZE;
+			this.productionSpeedMultiplier += Const.BUILDING_GROWTH_FACTOR_SPEED;
 		}
-		
 	}
 	
 	public void produce() {
-		//code to make a things
+		int selector = -1;
+		switch (type.type) {
+			case "farm" :
+				selector = 0;
+				break;
+			case "smith" :
+				
+				break;
+		}
+		parent.createUnit((byte)0, team, Const.UNIT_TYPES[3][0]);
+	}
+	
+	//SUDOKUKUKUUUUUUUUUUUUU!!!!!!!!!!!
+	public void destroy() {
+		parent.buildings.remove(this);
 	}
 }

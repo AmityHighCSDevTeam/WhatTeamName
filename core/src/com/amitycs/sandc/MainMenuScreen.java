@@ -74,7 +74,7 @@ public class MainMenuScreen implements Screen{
 	//this method should only be run where a click happened
 	private void clickEvents() {
 		if (newGameButt.mousedOver()) {
-			game.setScreen(new GameScreen(game, this));
+			game.setScreen(new FileSelectScreen(game, this));
 		}
 	}
 

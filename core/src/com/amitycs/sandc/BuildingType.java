@@ -1,7 +1,7 @@
 package com.amitycs.sandc;
 
 public class BuildingType {
-	public String type;
+	public final String type;
 	public final float productionInterval;
 	public final float productionSpeed;
 	
