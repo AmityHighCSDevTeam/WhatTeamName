@@ -11,21 +11,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameScreen implements Screen{
 	private final SupplyAndConquer game;
-	private final Screen parent;
 	OrthographicCamera cam;
 	SpriteBatch batch;
 	Button exitButton;
 	Map map;
 	
-	public GameScreen (SupplyAndConquer game, Screen parent, String fileName) {
+	public GameScreen (SupplyAndConquer game,  String fileName) {
 		this.game = game;
-		this.parent = parent;
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
 		batch = new SpriteBatch();
 		try {
 			map = new Map(new File(fileName), this);
 		}catch (FileNotFoundException e) {
-			game.setScreen(new FailedToFindFileScreen(game, this));
+			game.setScreen(new FailedToFindFileScreen(game));
 		}
 		//exitButton = new Button(new Texture(Gdx.files.internal()));
 	}
@@ -80,8 +78,22 @@ public class GameScreen implements Screen{
 
 	}
 	
-	public void exit() {
-		game.setScreen(parent);
+	/*
+	 * conditions:
+	 * 0 = user exit
+	 * 1 = some kind of error
+	 * #theClifegotmelike
+	 */
+	
+	public void exit(int condition) {
+		switch (condition) {
+			case 0 :
+				this.game.setScreen(new SaveGameScreen(game, map));
+				break;
+			case 1 :
+				this.game.setScreen(new ErrorScreen(game));
+				break;
+		}
 	}
 	
 }

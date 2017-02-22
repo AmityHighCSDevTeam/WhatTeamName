@@ -1,16 +1,19 @@
 package com.amitycs.sandc;
 
 public class Unit {
+	public boolean team; // false = red, true = blue
+	public UnitType type; //unit type. Includes both weapons and armor
+	private Map parent;
+	//stuff above here should be final, but im dumb so it cant. Don't fuck with it.
+	
 	public float food;
 	public float morale;
 	public float armsDurability; //also serves as resource value in the case of carts
 	public float armorDurability;
 	public byte men;
 	public float movement;
-	public boolean team; // false = red, true = blue
-	public UnitType type; //unit type. Includes both weapons and armor
-	private Map parent;
 	
+	//@SuppressWarnings 
 	public Unit(byte men, String weapon, String armor, boolean team, Map parent) {
 		setUnit(men, stringToUnitType(weapon, armor), team, parent);
 		freshUnit();
@@ -19,6 +22,18 @@ public class Unit {
 	public Unit(byte men, UnitType type, boolean team,  Map parent) {
 		setUnit(men, type, team, parent);
 		freshUnit();
+	}
+	
+	public Unit(float food, float morale, float armsDurability, float armorDurability, byte men, float movement, boolean team, UnitType type, Map parent) {
+		this.food = food;
+		this.morale = morale;
+		this.armsDurability = armsDurability;
+		this.armorDurability = armorDurability;
+		this.men = men;
+		this.movement = movement;
+		this.team = team;
+		this.type = type;
+		this.parent = parent;
 	}
 	
 	private UnitType stringToUnitType(String weapon, String armor) {
@@ -77,6 +92,7 @@ public class Unit {
 		this.armorDurability = 0.0f;
 	}
 	
+	//intended for use with carts. Don't use if it isnt a cart thing.
 	public void setResource(float amount) {
 		this.armsDurability = amount;
 	}
@@ -107,5 +123,19 @@ public class Unit {
 	//ALLAHU SNACKBAR
 	public void die() {
 		parent.units.remove(this);
+	}
+	
+	public Unit invertedTeam() {
+		return new Unit(food, morale, armsDurability, armorDurability, men, movement, !team, type, parent);
+	}
+	
+	public void swapSides() {
+		this.parent.units.add(invertedTeam());
+		this.die();
+	}
+	
+	@Override
+	public String toString() {
+		return food + " " + morale + " " + armsDurability + " " + armorDurability + " " + men + " " + movement + " " + team + " " + type.toString();
 	}
 }

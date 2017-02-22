@@ -6,22 +6,22 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class FileSelectScreen implements Screen{
+public class ErrorScreen implements Screen {
 
 	OrthographicCamera cam;
 	SpriteBatch batch;
-	SupplyAndConquer game;
+	private final SupplyAndConquer game;
 	
-	public FileSelectScreen(SupplyAndConquer game) {
-		this.game = game;
+	public ErrorScreen(SupplyAndConquer game) {
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
+		this.game = game;
 	}
 	
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -31,42 +31,41 @@ public class FileSelectScreen implements Screen{
 		batch.begin();{
 			
 		}batch.end();
-		
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		cam.setToOrtho(false, width, height);
 		batch.setProjectionMatrix(cam.combined);
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 	
-	public void launchGame(String fileName) {
-		game.setScreen(new GameScreen(game, fileName));
+	public void continueToMenu() {
+		this.game.setScreen(new MainMenuScreen(game));
 	}
-	
 }

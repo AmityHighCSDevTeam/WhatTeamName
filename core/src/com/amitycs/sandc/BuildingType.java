@@ -20,4 +20,9 @@ public class BuildingType {
 		}
 		productionSpeed = 1.0f;
 	}
+	
+	@Override
+	public String toString() {
+		return type;
+	}
 }

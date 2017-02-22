@@ -23,5 +23,49 @@ public class UnitType {
 				break;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		int w, a;
+		switch (weapon) {
+			case "bow":
+				w = 0;
+				break;
+			case "pike":
+				w = 1;
+				break;
+			case "spear":
+				w = 2;
+				break;
+			case "sword":
+				w = 3;
+				break;
+			case "armor":
+				w = -2;
+				break;
+			case "food":
+				w = -1;
+				break;
+			default : //this should never, happen, and if it does somebody done fucked up.
+				w = -3; 
+				break;
+		}
+		switch (armor) {
+			case "naked":
+				a = 0;
+				break;
+			case "hide":
+				a = 1;
+				break;
+			case "metal":
+				a = 2;
+				break;
+			case "cart":
+				a = 3;
+				w += 2;
+				break;
+		}
+		return weapon + " " + armor;
+	}
 
 }

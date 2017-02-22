@@ -1,28 +1,33 @@
 package com.amitycs.sandc;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class FileSelectScreen implements Screen{
+public class SaveGameScreen implements Screen {
 
 	OrthographicCamera cam;
 	SpriteBatch batch;
-	SupplyAndConquer game;
+	private final SupplyAndConquer game;
+	private final Map map;
+	String file;
 	
-	public FileSelectScreen(SupplyAndConquer game) {
-		this.game = game;
+	public SaveGameScreen(SupplyAndConquer game, Map map) {
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
+		this.game = game;
+		this.map = map;
 	}
 	
 	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void show() {}
 
 	@Override
 	public void render(float delta) {
@@ -31,42 +36,48 @@ public class FileSelectScreen implements Screen{
 		batch.begin();{
 			
 		}batch.end();
-		
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		cam.setToOrtho(false, width, height);
 		batch.setProjectionMatrix(cam.combined);
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 	
-	public void launchGame(String fileName) {
-		game.setScreen(new GameScreen(game, fileName));
+	public void write() throws IOException {
+		BufferedWriter w = new BufferedWriter(new FileWriter(new File(file))); {
+			w.write("");
+		}w.close();
 	}
 	
+	public void returnToMenu() {
+		this.game.setScreen(new MainMenuScreen(game));
+	}
+
 }

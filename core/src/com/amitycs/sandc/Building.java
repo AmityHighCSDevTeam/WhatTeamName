@@ -1,12 +1,12 @@
 package com.amitycs.sandc;
 
 public class Building {
-	public BuildingType type;
-	public boolean team; //false = red, true = blue
+	public final BuildingType type;
+	public final boolean team; //false = red, true = blue
+	private final Map parent;
 	public float productionCounter;
 	public float productionSpeedMultiplier;
 	public float productionBatchMultiplier;
-	public Map parent;
 	public float health;
 	
 	public Building(String type, boolean team, Map parent) {
@@ -25,10 +25,29 @@ public class Building {
 			case "smith" :
 				this.type = Const.BUILDING_TYPES[3];
 				break;
+			default : //this also should never happen. Users should never have access to this stuff.
+				this.type = null; //Would it be more efficient for me to pass around Objects instead of Strings? probably. Will I? It's a bit late now tbh...
+				break;
 		}
 		productionCounter = 0.0f;
 		productionSpeedMultiplier = 1.0f;
 		productionBatchMultiplier = 1.0f;
+	}
+	
+	public Building(BuildingType type, boolean team, Map parent) {
+		this.type = type;
+		this.team = team;
+		this.parent = parent;
+	}
+	
+	public Building(BuildingType type, boolean team, Map parent, float productionCounter, float productionSpeedMultiplier, float productionBatchMultiplier, float health) {
+		this.type = type;
+		this.team = team;
+		this.parent = parent;
+		this.productionCounter = productionCounter;
+		this.productionSpeedMultiplier = productionSpeedMultiplier;
+		this.productionBatchMultiplier = productionBatchMultiplier;
+		this.health = health;
 	}
 	
 	public void tick() {
@@ -54,8 +73,17 @@ public class Building {
 		parent.createUnit((byte)0, team, Const.UNIT_TYPES[3][0]);
 	}
 	
-	//SUDOKUKUKUUUUUUUUUUUUU!!!!!!!!!!!
+	//SUDOKUKUKUpUUUUkUUpUUUUUU!!!!!!!!!!!
 	public void destroy() {
 		parent.buildings.remove(this);
+	}
+	
+	public Building invertedTeam() {
+		return new Building(type, !team, parent, productionCounter, productionSpeedMultiplier, productionBatchMultiplier, health);
+	}
+	
+	public void swapSides() {
+		this.parent.buildings.add(invertedTeam());
+		destroy();
 	}
 }

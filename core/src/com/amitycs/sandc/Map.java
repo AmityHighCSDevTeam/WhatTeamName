@@ -2,6 +2,7 @@ package com.amitycs.sandc;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,19 +11,24 @@ public class Map {
 	public ArrayList<Building> buildings;
 	public boolean turn;
 	public GameScreen parent;
+	public int turnCounter;
 	
 	public Map(File file, GameScreen parent) throws FileNotFoundException {
 		this.parent = parent;
 		loadFromFile(file);
+		this.turnCounter = 0;
+		this.turn = false;
 	}
 	
 	private void loadFromFile(File file) throws FileNotFoundException {
-		Scanner s = new Scanner(file);
-		s.close();
+		Scanner s = new Scanner(file); {
+			//loading things
+		}s.close();
 	}
 	
 	public void endTurn() {
 		turn = !turn;
+		if (turn) turnCounter++;
 		for (Building b : buildings) {
 			if (b.team == turn) {
 				b.tick();
