@@ -10,14 +10,14 @@ public class Map {
 	public ArrayList<Unit> units;
 	public ArrayList<Building> buildings;
 	public boolean turn;
-	public GameScreen parent;
 	public int turnCounter;
+	public GameScreen parent;
 	
 	public Map(File file, GameScreen parent) throws FileNotFoundException {
-		this.parent = parent;
 		loadFromFile(file);
 		this.turnCounter = 0;
 		this.turn = false;
+		this.parent = parent;
 	}
 	
 	private void loadFromFile(File file) throws FileNotFoundException {
@@ -27,6 +27,7 @@ public class Map {
 	}
 	
 	public void endTurn() {
+		//units.
 		turn = !turn;
 		if (turn) turnCounter++;
 		for (Building b : buildings) {
@@ -44,19 +45,19 @@ public class Map {
 	public void createUnit(Unit u) {
 		this.units.add(u);
 	}
-	
-	public void createUnit(byte men, boolean team, UnitType type) {
-		this.units.add(new Unit(men, type, team, this));
+	/*
+	public void createUnit(byte men, boolean team, UnitType type, int[] location) {
+		this.units.add(new Unit(men, type, team, this, location[0], location[1]));
 	}
 	
-	public void createUnit(byte men, boolean team, String weapon, String armor) {
-		this.units.add(new Unit(men, weapon, armor, team, this));
+	public void createUnit(byte men, boolean team, String weapon, String armor, int[] location) {
+		this.units.add(new Unit(men, weapon, armor, team, this, location[0], location[1]));
 	}
 	
 	public void createBuilding(Building b) {
 		this.buildings.add(b);
 	}
-	
+	*/
 	public void distaintBattleMorale(boolean team) {
 		for (Unit unit : units)
 			if (unit.team == team)

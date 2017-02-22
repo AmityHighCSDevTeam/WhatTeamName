@@ -31,5 +31,8 @@ public class Const {
 	public static final float SMITH_PRODUCTION_BATCH_SIZE = 15.0f;
 	public static final float BUILDING_GROWTH_FACTOR_SPEED = 0.15f;
 	public static final float BUILDING_GROWTH_FACTOR_SIZE = 0.25f;
+	public static final float CASTLE_SIEGE_HEALTH = 10.0f;
+	public static final float CASTLE_HEALING_FACTOR = 0.25f;
+	public static final float CASTLE_SIEGE_RATE = 1.25f;
 	public static final int BARACKS_CAPACITY = 75;
 }

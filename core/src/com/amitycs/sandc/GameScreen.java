@@ -96,4 +96,8 @@ public class GameScreen implements Screen{
 		}
 	}
 	
+	public int smithProductionSelect() {
+		//do things later
+		return -1;
+	}
 }

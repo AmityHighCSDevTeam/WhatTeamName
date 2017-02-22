@@ -12,19 +12,22 @@ public class Unit {
 	public float armorDurability;
 	public byte men;
 	public float movement;
+	public int[] location; //location[0] = x, you can figure the other one.
 	
 	//@SuppressWarnings 
-	public Unit(byte men, String weapon, String armor, boolean team, Map parent) {
+	public Unit(byte men, String weapon, String armor, boolean team, Map parent, int x, int y) {
 		setUnit(men, stringToUnitType(weapon, armor), team, parent);
 		freshUnit();
+		setLocation(x, y);
 	}
 	
-	public Unit(byte men, UnitType type, boolean team,  Map parent) {
+	public Unit(byte men, UnitType type, boolean team,  Map parent, int x, int y) {
 		setUnit(men, type, team, parent);
 		freshUnit();
+		setLocation(x, y);
 	}
 	
-	public Unit(float food, float morale, float armsDurability, float armorDurability, byte men, float movement, boolean team, UnitType type, Map parent) {
+	public Unit(float food, float morale, float armsDurability, float armorDurability, byte men, float movement, boolean team, UnitType type, Map parent, int[] location) {
 		this.food = food;
 		this.morale = morale;
 		this.armsDurability = armsDurability;
@@ -34,6 +37,7 @@ public class Unit {
 		this.team = team;
 		this.type = type;
 		this.parent = parent;
+		this.location = location;
 	}
 	
 	private UnitType stringToUnitType(String weapon, String armor) {
@@ -92,6 +96,12 @@ public class Unit {
 		this.armorDurability = 0.0f;
 	}
 	
+	public void setLocation(int x, int y) {
+		this.location = new int[2];
+		location[0] = x;
+		location[1] = y;
+	}
+	
 	//intended for use with carts. Don't use if it isnt a cart thing.
 	public void setResource(float amount) {
 		this.armsDurability = amount;
@@ -126,11 +136,11 @@ public class Unit {
 	}
 	
 	public Unit invertedTeam() {
-		return new Unit(food, morale, armsDurability, armorDurability, men, movement, !team, type, parent);
+		return new Unit(food, morale, armsDurability, armorDurability, men, movement, !team, type, parent, location);
 	}
 	
 	public void swapSides() {
-		this.parent.units.add(invertedTeam());
+		this.parent.createUnit(invertedTeam());;
 		this.die();
 	}
 	
