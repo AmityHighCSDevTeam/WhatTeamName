@@ -18,6 +18,9 @@ public class UnitType {
 			case "metal" :
 				armorResist = 6;
 				break;
+			case "cart" :
+				armorResist = -1;
+				break;
 		}
 	}
 

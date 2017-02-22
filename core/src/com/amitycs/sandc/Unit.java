@@ -36,6 +36,12 @@ public class Unit {
 			case "sword":
 				w = 3;
 				break;
+			case "armor":
+				w = -2;
+				break;
+			case "food":
+				w = -1;
+				break;
 		}
 		switch (armor) {
 			case "naked":
@@ -46,6 +52,10 @@ public class Unit {
 				break;
 			case "metal":
 				a = 2;
+				break;
+			case "cart":
+				a = 3;
+				w += 2;
 				break;
 		}
 		if (a >= 0 && w >= 0) 
