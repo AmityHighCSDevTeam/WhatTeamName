@@ -35,4 +35,6 @@ public class Const {
 	public static final float CASTLE_HEALING_FACTOR = 0.25f;
 	public static final float CASTLE_SIEGE_RATE = 1.25f;
 	public static final int BARACKS_CAPACITY = 75;
+	public static final int CHARACTER_HEIGHT = 50; //for font
+	public static final int CHARACTER_WIDTH = 30;
 }

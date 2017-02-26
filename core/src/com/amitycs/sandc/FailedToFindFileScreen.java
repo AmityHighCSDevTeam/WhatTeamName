@@ -18,6 +18,7 @@ public class FailedToFindFileScreen implements Screen{
 		this.game = game;
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		failedToFind = new Texture(Gdx.files.internal("FailedToFindFile.png"));
 	}
 	
 	@Override
@@ -27,12 +28,12 @@ public class FailedToFindFileScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 0);
+		Gdx.gl.glClearColor(1, 1, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();{
-			
+			batch.draw(failedToFind, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		}batch.end();
-		
+		if (Gdx.input.justTouched()) clickEvents();
 	}
 
 	@Override
@@ -64,6 +65,10 @@ public class FailedToFindFileScreen implements Screen{
 	public void dispose() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void clickEvents() {
+		returnToMenu();
 	}
 	
 	public void returnToMenu() {
