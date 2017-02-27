@@ -40,6 +40,18 @@ public class Unit {
 		this.location = location;
 	}
 	
+	public Unit(String team, String weapon, String armor, String food, String morale, String armsDurability, String armorDurability, String men, String movement, String location0, String location1, Map parent) {
+		this.team = Boolean.getBoolean(team);
+		this.type = stringToUnitType(weapon, armor);
+		this.food = Float.parseFloat(food);
+		this.morale = Float.parseFloat(morale);
+		this.armsDurability = Float.parseFloat(armsDurability);
+		this.armorDurability = Float.parseFloat(armorDurability);
+		this.men = Byte.parseByte(men);
+		this.movement = Float.parseFloat(movement);
+		this.parent = parent;
+	}
+	
 	private UnitType stringToUnitType(String weapon, String armor) {
 		int w = -1, a = -1;
 		switch (weapon) {
@@ -122,8 +134,7 @@ public class Unit {
 	}
 	
 	public double battlePower(Terrain t) {
-		return men * men * morale * 
-				t.combatModifiers.get(type.weapon); //the combat modifier for this unit's weapon in the terrain
+		return men * men * morale * t.combatModifiers.get(type.weapon);
 	}
 	
 	public double armoreScore() {
@@ -144,8 +155,14 @@ public class Unit {
 		this.die();
 	}
 	
+	//direction is 0 = north, 1 = east, 2 = south, 3 - west
+	public boolean move(int direction) {
+		//Terrain
+		return true;
+	}
+	
 	@Override
 	public String toString() {
-		return food + " " + morale + " " + armsDurability + " " + armorDurability + " " + men + " " + movement + " " + team + " " + type.toString();
+		return team + " " + type.toString() + " " + food + " " + morale + " " + armsDurability + " " + armorDurability + " " + men + " " + movement + location[0] + location[1];
 	}
 }

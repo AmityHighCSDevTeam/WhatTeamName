@@ -4,7 +4,7 @@ public class Building {
 	public final BuildingType type;
 	public final boolean team; //false = red, true = blue
 	private final Map parent;
-	public final int[] location;
+	public int[] location;
 	public float productionCounter;
 	public float productionSpeedMultiplier;
 	public float productionBatchMultiplier;
@@ -54,6 +54,36 @@ public class Building {
 		this.location = location;
 	}
 	
+	public Building(String team, String type, String productionCounter, String productionSpeedMultiplier, String productionBatchMultiplier, String health, String location0, String location1, Map parent) {
+		this.team = Boolean.parseBoolean(team);
+		switch (type) {
+			case "barracks" :
+				this.type = Const.BUILDING_TYPES[0];
+				break;
+			case "castle" :
+				this.type = Const.BUILDING_TYPES[1];
+				break;
+			case "farm" :
+				this.type = Const.BUILDING_TYPES[2];
+				break;
+			case "smith" :
+				this.type = Const.BUILDING_TYPES[3];
+				break;
+			default : //this also should never happen. Users should never have access to this stuff.
+				this.type = null; //Would it be more efficient for me to pass around Objects instead of Strings? probably. Will I? It's a bit late now tbh...
+				break;
+		}
+		this.productionCounter = Float.parseFloat(productionCounter);
+		this.productionSpeedMultiplier = Float.parseFloat(productionSpeedMultiplier);
+		this.productionBatchMultiplier = Float.parseFloat(productionBatchMultiplier);
+		this.health = Float.parseFloat(health);
+		this.location = new int[2];
+		this.location[0] = Integer.parseInt(location0);
+		this.location[1] = Integer.parseInt(location1);
+		this.parent = parent;
+		
+	}
+	
 	public void tick() {
 		this.productionCounter += type.productionSpeed * this.productionSpeedMultiplier;
 		if (this.productionCounter >= type.productionInterval && type.type != "castle" && type.type != "baracks") {
@@ -101,6 +131,10 @@ public class Building {
 	public void swapSides() {
 		this.parent.buildings.add(invertedTeam());
 		destroy();
+	}
+	
+	public String toString() {
+		return team + " " + type.toString() + " " + productionCounter  + " " + productionSpeedMultiplier + " " + productionBatchMultiplier + " " + health + " " + location[0] + location[1];
 	}
 	
 }

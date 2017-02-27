@@ -17,6 +17,14 @@ public class Const {
 			new BuildingType("farm"),
 			new BuildingType("smith"),
 	};
+	public static final Terrain[] TERRAINS = {
+			new Terrain("water", 0.0f, 0.0f, 0.0f, 0.0f, -1.0f),
+			new Terrain("field", 1.0f, 1.5f, 1.2f, 0.8f, 1.25f),
+			new Terrain("hills", 1.75f, 0.8f, 1.0f, 1.0f, 0.75f),
+			new Terrain("marsh", 0.5f, 0.15f, 0.5f, 0.75f, 0.25f),
+			new Terrain("forest", 0.75f, 0.5f, 0.65f, 0.85f, 0.65f)
+	};
+	public static final int[] MAP_SIZE = {256, 128};
 	public static final float UNIT_MOVEMENT = 10;
 	public static final float MAN_FOOD_CONSUMPTION = 0.1f;
 	public static final float EQUIPMENT_WEAR_FACTOR = 0.01f;

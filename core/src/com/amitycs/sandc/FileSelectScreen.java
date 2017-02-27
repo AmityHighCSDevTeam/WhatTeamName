@@ -3,27 +3,31 @@ package com.amitycs.sandc;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class FileSelectScreen implements Screen{
 
-	OrthographicCamera cam;
-	SpriteBatch batch;
+	//OrthographicCamera cam;
+	//SpriteBatch batch;
 	SupplyAndConquer game;
+	
+	/*
 	Button newFile;
 	Button loadFile;
 	Texture prompt;
-	
-
+	*/
+	String fileName = null;
+	/*
 	private Texture FONT_ATLAS = new Texture(Gdx.files.internal("Font.png"));
 	public Font[][] FONT_CHARACTERS; // these should be final, but eh
-	
+	*/
 	
 	
 	public FileSelectScreen(SupplyAndConquer game) {
 		this.game = game;
+		FileSelectTextInputListener listener = new FileSelectTextInputListener(this);
+		Gdx.input.getTextInput(listener, "Input a file name", "", "Game File");
+		/*
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
 		newFile = new Button(new Texture(Gdx.files.internal("New")));
@@ -45,6 +49,7 @@ public class FileSelectScreen implements Screen{
 				}
 			}
 		}
+		*/
 	}
 	
 	@Override
@@ -56,16 +61,18 @@ public class FileSelectScreen implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();{
+		//batch.begin();{
 			
-		}batch.end();
-		
+		//}batch.end();
+		if (fileName != null) {
+			fileThings();
+		}
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		cam.setToOrtho(false, width, height);
-		batch.setProjectionMatrix(cam.combined);
+		//cam.setToOrtho(false, width, height);
+		//batch.setProjectionMatrix(cam.combined);
 		
 	}
 
@@ -93,8 +100,22 @@ public class FileSelectScreen implements Screen{
 		
 	}
 	
+	private void fileThings() {
+		if (Gdx.files.internal(fileName).exists()) 
+			launchGame(fileName);
+		else
+			makeFileScreen();
+	}
+	
 	public void launchGame(String fileName) {
 		game.setScreen(new GameScreen(game, fileName));
 	}
 	
+	public void returnToMenu() {
+		game.setScreen(new MainMenuScreen(game));
+	}
+	
+	public void makeFileScreen() {
+		game.setScreen(new MakeFileScreen(game, fileName));
+	}
 }
