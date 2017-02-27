@@ -1,5 +1,11 @@
 package com.amitycs.sandc;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -79,15 +85,44 @@ public class MakeFileScreen implements Screen {
 	}
 	
 	public void clickEvents() {
-		if (yes.mousedOver()) createNewGame();
+		if (yes.mousedOver()) {
+			createNewGame();
+			enterGameScreen();
+		}
 		if (no.mousedOver()) exitToMenu();
 	}
 	
 	private void createNewGame() {
+		try {
+			System.out.println(fileName);
+			copyFiles(Gdx.files.internal("template").file(), Gdx.files.internal(fileName).file());
+		}catch (IOException e) {
+			e.printStackTrace(System.out);
+		}
 		
 	}
 	
 	private void exitToMenu() {
 		game.setScreen(new MainMenuScreen(game));
+	}
+	
+	private void enterGameScreen() {
+		game.setScreen(new GameScreen(game, new File(fileName)));
+	}
+
+	private void copyFiles(File source, File target) throws IOException {
+		
+		if (source.exists() && source.isFile() && !target.isDirectory()) {
+			target.delete();
+			target.createNewFile();
+			Scanner s = new Scanner(source);
+			BufferedWriter w = new BufferedWriter(new FileWriter(target));
+			while(s.hasNextLine()) {
+				String str = s.nextLine() + "\n";
+				w.write(str);
+			}
+			s.close();
+			w.close();
+		}
 	}
 }

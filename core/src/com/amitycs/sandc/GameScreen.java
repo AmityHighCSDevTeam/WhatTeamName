@@ -16,12 +16,12 @@ public class GameScreen implements Screen{
 	Button exitButton;
 	Map map;
 	
-	public GameScreen (SupplyAndConquer game,  String fileName) {
+	public GameScreen (SupplyAndConquer game, File file) {
 		this.game = game;
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
 		batch = new SpriteBatch();
 		try {
-			map = new Map(new File(fileName), this);
+			map = new Map(file, this);
 		}catch (FileNotFoundException e) {
 			game.setScreen(new FailedToFindFileScreen(game));
 		}

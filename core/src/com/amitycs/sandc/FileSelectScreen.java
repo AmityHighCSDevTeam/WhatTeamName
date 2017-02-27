@@ -1,9 +1,10 @@
 package com.amitycs.sandc;
 
+import java.io.File;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 
 public class FileSelectScreen implements Screen{
 
@@ -108,7 +109,7 @@ public class FileSelectScreen implements Screen{
 	}
 	
 	public void launchGame(String fileName) {
-		game.setScreen(new GameScreen(game, fileName));
+		game.setScreen(new GameScreen(game, new File(fileName)));
 	}
 	
 	public void returnToMenu() {
