@@ -1,8 +1,10 @@
 package com.amitycs.sandc;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.math.BigInteger;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,6 +15,7 @@ public class Map {
 	public boolean turn;
 	public int turnCounter;
 	public GameScreen parent;
+	private File file;
 	
 	public Map(File file, GameScreen parent) throws FileNotFoundException {
 		terrain = new Terrain[Const.MAP_SIZE[0]][Const.MAP_SIZE[1]];
@@ -29,25 +32,27 @@ public class Map {
 	}
 	
 	private void loadFromFile(File file) throws FileNotFoundException {
+		this.file = file;
 		Scanner s = new Scanner(file); {
 			turn = Boolean.getBoolean(s.nextLine());
 			turnCounter = Integer.parseInt(s.nextLine());
-			loadTerrain(s);
-			loadUnits(s);
-			loadBuildings(s);
+			loadTerrainFromText(s);
+			loadUnitsFromText(s);
+			loadBuildingsFromText(s);
 		}s.close();
 	}
 	
-	private void loadTerrain(Scanner s) {
+	private void loadTerrainFromText(Scanner s) {
 		String reader = s.nextLine();
 		for (int i = 0; i < terrain.length; i++) {
 			for (int j = 0; j < terrain[i].length; j++) {
-				terrain[i][j] = Const.TERRAINS[Integer.parseInt(reader.charAt(i + j) + "")];
+				terrain[i][j] = Const.TERRAINS[Integer.parseInt(reader.charAt(j) + "")];
 			}
+			reader = s.nextLine();
 		}
 	}
 	
-	private void loadUnits(Scanner s) {
+	private void loadUnitsFromText(Scanner s) {
 		int unitCount = Integer.parseInt(s.nextLine());
 		for (int i = 0; i < unitCount; i++) {
 			String[] arr = s.nextLine().split(" ");
@@ -55,7 +60,7 @@ public class Map {
 		}
 	}
 	
-	private void loadBuildings(Scanner s) {
+	private void loadBuildingsFromText(Scanner s) {
 		int buildingCount = Integer.parseInt(s.nextLine());
 		for (int i = 0; i < buildingCount; i++) {
 			String[] arr = s.nextLine().split(" ");
@@ -108,6 +113,20 @@ public class Map {
 				unit.morale -= Const.DISTANT_BATTLE_LOSS_MORALE_PENALTY;
 	}
 	
+	//true if it did it, falsei f it didnt
+	public boolean saveGame() {
+		this.file.delete();
+		try {
+			this.file.createNewFile();
+			BufferedWriter b = new BufferedWriter(new FileWriter(file));{
+				b.write(this.toString());
+			}b.close();
+		}catch(IOException e) {
+			return false;
+		}
+		return true;
+	}
+	
 	public String toString() {
 		String str = "";
 		str += turn + "\n";
@@ -134,15 +153,16 @@ public class Map {
 						break;
 				}
 			}
+			str += "\n";
 		}
 		str += "\n";
 		
-		str += units.size() + " ";
+		str += units.size() + "\n";
 		for (int i = 0; i < units.size(); i++) {
 			str += units.toString() + "\n";
 		}
 		
-		str += buildings.size() + " ";
+		str += buildings.size() + "\n";
 		for (int i = 0; i < units.size(); i++) {
 			str += buildings.toString() + "\n";
 		}

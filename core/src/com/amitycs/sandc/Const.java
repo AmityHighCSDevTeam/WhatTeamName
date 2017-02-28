@@ -25,7 +25,7 @@ public class Const {
 			new Terrain("forest", 0.75f, 0.5f, 0.65f, 0.85f, 0.65f)
 	};
 	public static final int[] MAP_SIZE = {256, 128};
-	public static final float UNIT_MOVEMENT = 10;
+	public static final float UNIT_MOVEMENT = 10.0f;
 	public static final float MAN_FOOD_CONSUMPTION = 0.1f;
 	public static final float EQUIPMENT_WEAR_FACTOR = 0.01f;
 	public static final float BATTLE_PARTICIPATION_WEAR_FACTOR = 20.0f; //the wear multiplier if a unit actually participated in a battle
