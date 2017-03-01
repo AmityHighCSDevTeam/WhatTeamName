@@ -74,14 +74,15 @@ public class MakeFileScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		this.dispose();
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		batch.dispose();
+		prompt.dispose();
+		yes.dispose();
+		no.dispose();
 	}
 	
 	public void clickEvents() {
@@ -102,7 +103,7 @@ public class MakeFileScreen implements Screen {
 		
 	}
 	
-	private void exitToMenu() {
+	public void exitToMenu() {
 		game.setScreen(new MainMenuScreen(game));
 	}
 	

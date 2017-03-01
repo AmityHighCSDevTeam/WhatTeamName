@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameScreen implements Screen{
@@ -25,6 +26,7 @@ public class GameScreen implements Screen{
 		}catch (FileNotFoundException e) {
 			game.setScreen(new FailedToFindFileScreen(game));
 		}
+		exitButton = new Button(new Texture(Gdx.files.internal("ExitGame.png")));
 		//exitButton = new Button(new Texture(Gdx.files.internal()));
 	}
 
@@ -70,11 +72,11 @@ public class GameScreen implements Screen{
 	@Override
 	public void dispose() {
 		batch.dispose();
-		
+		exitButton.dispose();
 	}
 	
 	private void clickEvents() {
-
+		if (exitButton.mousedOver()) exit(0);
 	}
 	
 	/*

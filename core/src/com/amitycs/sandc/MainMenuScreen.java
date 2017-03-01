@@ -16,14 +16,14 @@ public class MainMenuScreen implements Screen{
 	
 	public MainMenuScreen(SupplyAndConquer game) {
 		this.game = game;
+		batch = new SpriteBatch();
+		newGameButt = new Button(new Texture(Gdx.files.internal("newGame.png")));
+		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		title = new Texture(Gdx.files.internal("title.png"));
 	}
 	
 	@Override
 	public void show() {
-		batch = new SpriteBatch();
-		newGameButt = new Button(new Texture(Gdx.files.internal("newGame.png")));
-		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
-		title = new Texture(Gdx.files.internal("title.png"));
 	}
 
 	@Override
