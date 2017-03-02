@@ -43,17 +43,18 @@ public class Map {
 	}
 	
 	private void loadTerrainFromText(Scanner s) {
-		String reader = s.nextLine();
 		for (int i = 0; i < terrain.length; i++) {
+			String reader = s.nextLine();
 			for (int j = 0; j < terrain[i].length; j++) {
 				terrain[i][j] = Const.TERRAINS[Integer.parseInt(reader.charAt(j) + "")];
 			}
-			reader = s.nextLine();
 		}
 	}
 	
 	private void loadUnitsFromText(Scanner s) {
 		int unitCount = Integer.parseInt(s.nextLine());
+		System.out.println(unitCount);
+		if (unitCount == 0); else
 		for (int i = 0; i < unitCount; i++) {
 			String[] arr = s.nextLine().split(" ");
 			units.add(new Unit(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8], arr[9], arr[10], this));
@@ -190,7 +191,6 @@ public class Map {
 			}
 			str += "\n";
 		}
-		str += "\n";
 		
 		str += units.size() + "\n";
 		for (int i = 0; i < units.size(); i++) {

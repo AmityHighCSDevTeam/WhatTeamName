@@ -7,13 +7,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class MainMenuScreen implements Screen{
+public class MainMenuScreen implements Screen {
 	OrthographicCamera cam;
 	SpriteBatch batch;
 	Button newGameButt;
 	Texture title;
 	private final SupplyAndConquer game;
-	
+
 	public MainMenuScreen(SupplyAndConquer game) {
 		this.game = game;
 		batch = new SpriteBatch();
@@ -21,7 +21,7 @@ public class MainMenuScreen implements Screen{
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		title = new Texture(Gdx.files.internal("title.png"));
 	}
-	
+
 	@Override
 	public void show() {
 	}
@@ -30,13 +30,16 @@ public class MainMenuScreen implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();{
+		batch.begin();
+		{
 			int width = Gdx.graphics.getWidth();
 			int height = Gdx.graphics.getHeight();
 			batch.draw(title, width / 2 - width / 4, height - width / 8, width / 2, width / 8);
 			newGameButt.draw(batch);
-		}batch.end();
-		if (Gdx.input.justTouched()) clickEvents();
+		}
+		batch.end();
+		if (Gdx.input.justTouched())
+			clickEvents();
 	}
 
 	@Override
@@ -51,12 +54,12 @@ public class MainMenuScreen implements Screen{
 
 	@Override
 	public void pause() {
-		
+
 	}
 
 	@Override
 	public void resume() {
-		
+
 	}
 
 	@Override
@@ -70,11 +73,11 @@ public class MainMenuScreen implements Screen{
 		title.dispose();
 		newGameButt.dispose();
 	}
-	
-	//this method should only be run where a click happened
+
+	// this method should only be run where a click happened
 	private void clickEvents() {
 		if (newGameButt.mousedOver()) {
-			game.setScreen(new FileSelectScreen(game));//FileSelectScreen(game));
+			game.setScreen(new FileSelectScreen(game));// FileSelectScreen(game));
 		}
 	}
 

@@ -18,37 +18,42 @@ public class SaveGameScreen implements Screen {
 	SpriteBatch batch;
 	private final SupplyAndConquer game;
 	private final Map map;
-	String file;
+	File file;
 	Texture prompt;
 	Button yes;
 	Button no;
 	Button backToGame;
-	
-	public SaveGameScreen(SupplyAndConquer game, Map map) {
+
+	public SaveGameScreen(SupplyAndConquer game, Map map, File file) {
 		batch = new SpriteBatch();
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
 		this.game = game;
 		this.map = map;
+		this.file = file;
 		prompt = new Texture("SaveScreenPrompt.png");
 		yes = new Button(new Texture(Gdx.files.internal("Yes.png")));
 		no = new Button(new Texture(Gdx.files.internal("No.png")));
 		backToGame = new Button(new Texture(Gdx.files.internal("ReturnToGame.png")));
 	}
-	
+
 	@Override
-	public void show() {}
+	public void show() {
+	}
 
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();{
+		batch.begin();
+		{
 			batch.draw(prompt, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			yes.draw(batch);
 			no.draw(batch);
 			backToGame.draw(batch);
-		}batch.end();
-		if (Gdx.input.justTouched()) clickEvents();
+		}
+		batch.end();
+		if (Gdx.input.justTouched())
+			clickEvents();
 	}
 
 	@Override
@@ -83,28 +88,33 @@ public class SaveGameScreen implements Screen {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public void clickEvents() {
-		if (yes.mousedOver()) write();
-		if (no.mousedOver()) returnToMenu();
-		if (backToGame.mousedOver()) returnToGame();
+		if (yes.mousedOver())
+			write();
+		if (no.mousedOver())
+			returnToMenu();
+		if (backToGame.mousedOver())
+			returnToGame();
 	}
-	
+
 	public void write() {
 		try {
-			BufferedWriter w = new BufferedWriter(new FileWriter(new File(file))); {
+			BufferedWriter w = new BufferedWriter(new FileWriter(file));
+			{
 				w.write(map.toString());
-			}w.close();
-		}catch (IOException e) {
-			
+			}
+			w.close();
+		} catch (IOException e) {
+
 		}
 		returnToMenu();
 	}
-	
+
 	public void returnToMenu() {
 		this.game.setScreen(new MainMenuScreen(game));
 	}
-	
+
 	public void returnToGame() {
 		this.game.setScreen(new GameScreen(game, map));
 	}

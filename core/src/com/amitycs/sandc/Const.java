@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Const {
 	public static final Texture BUTTON_BASE = new Texture(Gdx.files.internal("buttonBase.png"));
+	public static final Texture MISSING_TEXTURE = new Texture(Gdx.files.internal("missing.png"));
 	public static final UnitType[][] UNIT_TYPES = {
 			{new UnitType("bow", "naked"), new UnitType("pike", "naked"), new UnitType("spear", "naked"), new UnitType("sword", "naked")}, 
 			{new UnitType("bow", "hide"), new UnitType("pike", "hide"), new UnitType("spear", "hide"), new UnitType("sword", "hide")}, 

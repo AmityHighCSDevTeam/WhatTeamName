@@ -4,39 +4,94 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class GameScreen implements Screen{
+public class GameScreen implements Screen {
 	private final SupplyAndConquer game;
 	OrthographicCamera cam;
 	SpriteBatch batch;
 	Button exitButton;
 	Map map;
-	float[] cameraLocation; //[0] is x, [1] is y marks the center of the view
-							//measured in terms of tiles
-	
-	Texture[][] units; // first array is team, 0 = blu 1 = red
-						// inner array is unit type, numbered like in Const
-	Texture[] armor; // 0 = none, 1 = leather, 2 = metal
-	
-	
-	public GameScreen (SupplyAndConquer game, File file) {
+	float[] cameraLocation; // [0] is x, [1] is y marks the center of the view
+							// measured in terms of tiles
+	Texture crosshair;
+	File file;
+
+	// i pressed ctrl + shift + f and it fucked up the formatting over here...
+	// oops
+	final Texture[][] units = {
+			{ new Texture(Gdx.files.internal("bluBow.png")), new Texture(Gdx.files.internal("bluPike.png")),
+					new Texture(Gdx.files.internal("bluSpear.png")), new Texture(Gdx.files.internal("bluSword.png")) },
+			{ new Texture(Gdx.files.internal("redBow.png")), new Texture(Gdx.files.internal("redPike.png")),
+					new Texture(Gdx.files.internal("redSpear.png")),
+					new Texture(Gdx.files.internal("redSword.png")) } }; // first
+																			// array
+																			// is
+																			// team,
+																			// 0
+																			// =
+																			// blu
+																			// 1
+																			// =
+																			// red
+																			// inner
+																			// array
+																			// is
+																			// unit
+																			// type,
+																			// numbered
+																			// like
+																			// in
+																			// Const
+
+	final Texture[][] buildings = {
+			{ new Texture(Gdx.files.internal("bluBarracks.png")), new Texture(Gdx.files.internal("bluCastle.png")),
+					new Texture(Gdx.files.internal("bluFarm.png")), new Texture(Gdx.files.internal("bluSmith.png")) },
+			{ new Texture(Gdx.files.internal("redBarracks.png")), new Texture(Gdx.files.internal("redCastle.png")),
+					new Texture(Gdx.files.internal("redFarm.png")), new Texture(Gdx.files.internal("redSmith.png")) } };// same
+																														// deal
+																														// as
+																														// units,
+																														// except
+																														// they
+																														// arent
+																														// units.
+
+	final Texture[] armor = { new Texture(Gdx.files.internal("NoArmor.png")),
+			new Texture(Gdx.files.internal("Leather.png")), Const.MISSING_TEXTURE, Const.MISSING_TEXTURE, new Texture(Gdx.files.internal("Metal.png")) }; // 0
+																														// =
+																														// none,
+																														// 1
+																														// =
+																														// leather,
+																														// 2
+																														// =
+																														// metal
+
+	final Texture[] terrain = { new Texture(Gdx.files.internal("Water.png")),
+			new Texture(Gdx.files.internal("Field.png")), new Texture(Gdx.files.internal("Hills.png")),
+			new Texture(Gdx.files.internal("Marsh.png")), new Texture(Gdx.files.internal("Forest.png")) };
+
+	public GameScreen(SupplyAndConquer game, File file) {
+		this.file = file;
 		this.game = game;
 		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
 		batch = new SpriteBatch();
 		try {
 			map = new Map(file, this);
-		}catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			game.setScreen(new FailedToFindFileScreen(game));
 		}
 		exitButton = new Button(new Texture(Gdx.files.internal("ExitGame.png")));
 		cameraLocation = Const.CAMERA_START_POSITION;
+		crosshair = new Texture(Gdx.files.internal("Crosshair.png"));
 	}
-	
+
 	public GameScreen(SupplyAndConquer game, Map map) {
 		this.game = game;
 		this.map = map;
@@ -48,27 +103,59 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void show() {
-		
+
 	}
-	
+
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 0, 0, 0);
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();{
+		batch.begin();
+		{
+			int width = ((Gdx.graphics.getWidth() / Const.TILE_SIZE) / 2) + 1; //these are actually 1/2 width and height, but im too lazy to rename them
+			int height = ((Gdx.graphics.getHeight() / Const.TILE_SIZE) / 2) + 1;// these are measured by tiles, os yey
 			
+			for (int i = (int) (Math.floor(cameraLocation[0]) - width); i < Math.ceil(cameraLocation[0] + width); i++) {
+				for (int j = (int) (Math.floor(cameraLocation[1]) - height); j < Math.ceil(cameraLocation[1] + height); j++) {
+					drawTile(i, j, batch);
+				}
+			}
+			int crosshairSize = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) / 10;
+			batch.draw(crosshair, (Gdx.graphics.getWidth() / 2) - (crosshairSize / 2), (Gdx.graphics.getHeight() / 2) - (crosshairSize / 2), crosshairSize,  crosshairSize);
 			exitButton.draw(batch);
-		}batch.end();
-		if (Gdx.input.justTouched()) clickEvents();
-		if (Gdx.input.isButtonPressed(19)) cameraLocation[1] += Const.CAMERA_MOVE_SPEED * delta;
-		if (Gdx.input.isButtonPressed(20)) cameraLocation[1] -= Const.CAMERA_MOVE_SPEED * delta;
-		if (Gdx.input.isButtonPressed(21)) cameraLocation[0] -= Const.CAMERA_MOVE_SPEED * delta;
-		if (Gdx.input.isButtonPressed(22)) cameraLocation[0] += Const.CAMERA_MOVE_SPEED * delta;
+		}
+		batch.end();
+		if (Gdx.input.justTouched())
+			clickEvents();	
+		float speedMod = 1.0f;
 		
-		if (cameraLocation[0] < 0) cameraLocation[0] = 0;
-		if (cameraLocation[0] > Const.MAP_SIZE[0]) cameraLocation[0] = Const.MAP_SIZE[0];
-		if (cameraLocation[1] < 0) cameraLocation[1] = 0;
-		if (cameraLocation[1] > Const.MAP_SIZE[1]) cameraLocation[1] = Const.MAP_SIZE[1];
+		if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
+			speedMod *= 5.0f;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+			speedMod *= 5.0f;
+		}
+
+		if (Gdx.input.isKeyPressed(Input.Keys.UP))
+			cameraLocation[1] += Const.CAMERA_MOVE_SPEED * delta * speedMod;
+		if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+			cameraLocation[1] -= Const.CAMERA_MOVE_SPEED * delta * speedMod;
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+			cameraLocation[0] -= Const.CAMERA_MOVE_SPEED * delta * speedMod;
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+			cameraLocation[0] += Const.CAMERA_MOVE_SPEED * delta * speedMod;
+		
+		
+		if (cameraLocation[0] < 0)
+			cameraLocation[0] = 0;
+		if (cameraLocation[0] > Const.MAP_SIZE[0])
+			cameraLocation[0] = Const.MAP_SIZE[0];
+		if (cameraLocation[1] < 0)
+			cameraLocation[1] = 0;
+		if (cameraLocation[1] > Const.MAP_SIZE[1])
+			cameraLocation[1] = Const.MAP_SIZE[1];
+		
+		System.out.println(cameraLocation[0] + " " + cameraLocation[1]);
 	}
 
 	@Override
@@ -82,13 +169,13 @@ public class GameScreen implements Screen{
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -100,28 +187,105 @@ public class GameScreen implements Screen{
 	public void dispose() {
 		batch.dispose();
 		exitButton.dispose();
+		for (Texture t : armor)
+			if (t != null) t.dispose();
+		for (Texture t : terrain)
+			if (t != null) t.dispose();
+		for (Texture[] arr : units)
+			for (Texture t : arr) 
+				if (t != null) t.dispose();
+		for (Texture[] arr : buildings)
+			for (Texture t : arr) 
+				if (t != null) t.dispose();
 	}
-	
+
 	private void clickEvents() {
-		if (exitButton.mousedOver()) exit(0);
+		if (exitButton.mousedOver())
+			exit(0);
+	}
+
+	private boolean drawTile(int x, int y, SpriteBatch batch) {
+		if (x < 0 || y < 0 || x > 255 || y > 127) return false;
+		float xPos = x * Const.TILE_SIZE - cameraLocation[0] * Const.TILE_SIZE + (Gdx.graphics.getWidth() / Const.TILE_SIZE) * Const.TILE_SIZE / 2;
+		float yPos = y * Const.TILE_SIZE - cameraLocation[1] * Const.TILE_SIZE + (Gdx.graphics.getHeight() / Const.TILE_SIZE) * Const.TILE_SIZE / 2;
+
+		// drawing terrain
+		batch.draw(terrain[coolerSearch(Const.TERRAINS, map.terrain[x][y])], xPos, yPos, Const.TILE_SIZE,
+				Const.TILE_SIZE);
+
+		// drawing buildings
+		for (Building b : map.buildings) {
+			if (b.location[0] == x && b.location[1] == y) {
+				if (b.team) {
+					batch.draw(buildings[0][coolerSearch(Const.BUILDING_TYPES, b.type)], xPos, yPos,
+							Const.TILE_SIZE, Const.TILE_SIZE);
+				} else {
+					batch.draw(buildings[1][coolerSearch(Const.BUILDING_TYPES, b.type)], xPos, yPos,
+							Const.TILE_SIZE, Const.TILE_SIZE);
+				}
+			}
+		}
+
+		// drawing armor
+		for (Unit u : map.units) {
+			if (u.location[0] == x && u.location[1] == y) {
+				batch.draw(armor[u.type.armorResist - 1], xPos, yPos, Const.TILE_SIZE, Const.TILE_SIZE);
+			}
+		}
+
+		// drawing weapons
+		for (Unit u : map.units) {
+			if (u.location[0] == x && u.location[1] == y) {
+				int team = -1;
+				int wep = -1;
+				if (u.team) {
+					team = 0;
+				} else {
+					team = 1;
+				}
+				switch (u.type.weapon) {
+				case "bow":
+					wep = 0;
+					break;
+				case "pike":
+					wep = 1;
+					break;
+				case "spear":
+					wep = 2;
+					break;
+				case "sword":
+					wep = 3;
+					break;
+				}
+				batch.draw(units[team][wep], xPos, yPos, Const.TILE_SIZE, Const.TILE_SIZE);
+			}
+		}
+		return true;
+	}
+
+	public int coolerSearch(Object[] a, Object o) {
+		int val = -1;
+		for (int i = 0; i < a.length; i++)
+			if (a[i].equals(o)) {
+				val = i;
+				break;
+			}
+		return val;
 	}
 	
 	/*
-	 * conditions:
-	 * 0 = user exit
-	 * 1 = some kind of error
-	 * #theClifegotmelike
+	 * conditions: 0 = user exit 1 = some kind of error #theClifegotmelike
 	 */
-	
+
 	public void exit(int condition) {
 		switch (condition) {
-			case 0 :
-				this.game.setScreen(new SaveGameScreen(game, map));
-				break;
-			case 1 :
-				this.game.setScreen(new ErrorScreen(game));
-				break;
+		case 0:
+			this.game.setScreen(new SaveGameScreen(game, map, file));
+			break;
+		case 1:
+			this.game.setScreen(new ErrorScreen(game));
+			break;
 		}
 	}
-	
+
 }
