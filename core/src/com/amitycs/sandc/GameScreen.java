@@ -19,6 +19,7 @@ public class GameScreen implements Screen {
 	Map map;
 	float[] cameraLocation; // [0] is x, [1] is y marks the center of the view
 							// measured in terms of tiles
+	float zoom;
 	Texture crosshair;
 	File file;
 
@@ -90,6 +91,7 @@ public class GameScreen implements Screen {
 		exitButton = new Button(new Texture(Gdx.files.internal("ExitGame.png")));
 		cameraLocation = Const.CAMERA_START_POSITION;
 		crosshair = new Texture(Gdx.files.internal("Crosshair.png"));
+		zoom = 1.0f;
 	}
 
 	public GameScreen(SupplyAndConquer game, Map map) {
@@ -99,6 +101,8 @@ public class GameScreen implements Screen {
 		batch = new SpriteBatch();
 		exitButton = new Button(new Texture(Gdx.files.internal("ExitGame.png")));
 		cameraLocation = Const.CAMERA_START_POSITION;
+		crosshair = new Texture(Gdx.files.internal("Crosshair.png"));
+		zoom = 1.0f;
 	}
 
 	@Override
@@ -112,8 +116,8 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		{
-			int width = ((Gdx.graphics.getWidth() / Const.TILE_SIZE) / 2) + 1; //these are actually 1/2 width and height, but im too lazy to rename them
-			int height = ((Gdx.graphics.getHeight() / Const.TILE_SIZE) / 2) + 1;// these are measured by tiles, os yey
+			int width = (int) (((Gdx.graphics.getWidth() / (Const.TILE_SIZE * zoom)) / 2) + 1); //these are actually 1/2 width and height, but im too lazy to rename them
+			int height = (int) (((Gdx.graphics.getHeight() / (Const.TILE_SIZE * zoom)) / 2) + 1);// these are measured by tiles, os yey
 			
 			for (int i = (int) (Math.floor(cameraLocation[0]) - width); i < Math.ceil(cameraLocation[0] + width); i++) {
 				for (int j = (int) (Math.floor(cameraLocation[1]) - height); j < Math.ceil(cameraLocation[1] + height); j++) {
@@ -144,6 +148,10 @@ public class GameScreen implements Screen {
 			cameraLocation[0] -= Const.CAMERA_MOVE_SPEED * delta * speedMod;
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
 			cameraLocation[0] += Const.CAMERA_MOVE_SPEED * delta * speedMod;
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT_BRACKET))
+			zoom *= 1.005f;
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT_BRACKET))
+			zoom *= 0.995f;
 		
 		
 		if (cameraLocation[0] < 0)
@@ -206,22 +214,22 @@ public class GameScreen implements Screen {
 
 	private boolean drawTile(int x, int y, SpriteBatch batch) {
 		if (x < 0 || y < 0 || x > 255 || y > 127) return false;
-		float xPos = x * Const.TILE_SIZE - cameraLocation[0] * Const.TILE_SIZE + (Gdx.graphics.getWidth() / Const.TILE_SIZE) * Const.TILE_SIZE / 2;
-		float yPos = y * Const.TILE_SIZE - cameraLocation[1] * Const.TILE_SIZE + (Gdx.graphics.getHeight() / Const.TILE_SIZE) * Const.TILE_SIZE / 2;
+		float xPos = x * (Const.TILE_SIZE * zoom) - cameraLocation[0] * (Const.TILE_SIZE * zoom) + (Gdx.graphics.getWidth() / (Const.TILE_SIZE * zoom)) * (Const.TILE_SIZE * zoom) / 2;
+		float yPos = y * (Const.TILE_SIZE * zoom) - cameraLocation[1] * (Const.TILE_SIZE * zoom) + (Gdx.graphics.getHeight() / (Const.TILE_SIZE * zoom)) * (Const.TILE_SIZE * zoom) / 2;
 
 		// drawing terrain
-		batch.draw(terrain[coolerSearch(Const.TERRAINS, map.terrain[x][y])], xPos, yPos, Const.TILE_SIZE,
-				Const.TILE_SIZE);
+		batch.draw(terrain[coolerSearch(Const.TERRAINS, map.terrain[x][y])], xPos, yPos, (Const.TILE_SIZE * zoom),
+				(Const.TILE_SIZE * zoom));
 
 		// drawing buildings
 		for (Building b : map.buildings) {
 			if (b.location[0] == x && b.location[1] == y) {
 				if (b.team) {
 					batch.draw(buildings[0][coolerSearch(Const.BUILDING_TYPES, b.type)], xPos, yPos,
-							Const.TILE_SIZE, Const.TILE_SIZE);
+							(Const.TILE_SIZE * zoom), (Const.TILE_SIZE * zoom));
 				} else {
 					batch.draw(buildings[1][coolerSearch(Const.BUILDING_TYPES, b.type)], xPos, yPos,
-							Const.TILE_SIZE, Const.TILE_SIZE);
+							(Const.TILE_SIZE * zoom), (Const.TILE_SIZE * zoom));
 				}
 			}
 		}
@@ -229,7 +237,7 @@ public class GameScreen implements Screen {
 		// drawing armor
 		for (Unit u : map.units) {
 			if (u.location[0] == x && u.location[1] == y) {
-				batch.draw(armor[u.type.armorResist - 1], xPos, yPos, Const.TILE_SIZE, Const.TILE_SIZE);
+				batch.draw(armor[u.type.armorResist - 1], xPos, yPos, (Const.TILE_SIZE * zoom), (Const.TILE_SIZE * zoom));
 			}
 		}
 
@@ -257,7 +265,7 @@ public class GameScreen implements Screen {
 					wep = 3;
 					break;
 				}
-				batch.draw(units[team][wep], xPos, yPos, Const.TILE_SIZE, Const.TILE_SIZE);
+				batch.draw(units[team][wep], xPos, yPos, (Const.TILE_SIZE * zoom), (Const.TILE_SIZE * zoom));
 			}
 		}
 		return true;
