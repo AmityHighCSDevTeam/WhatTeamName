@@ -53,7 +53,6 @@ public class Map {
 	
 	private void loadUnitsFromText(Scanner s) {
 		int unitCount = Integer.parseInt(s.nextLine());
-		System.out.println(unitCount);
 		if (unitCount == 0); else
 		for (int i = 0; i < unitCount; i++) {
 			String[] arr = s.nextLine().split(" ");
@@ -86,24 +85,35 @@ public class Map {
 		}
 	}
 	
+	//north,east,south,west 0,1,2,3 they the same
+	public void moveUnit(Unit u, int direction){
+		switch (direction) {
+		case 0 :
+			u.location[1] += 1;
+			break;
+		case 1 :
+			u.location[0] += 1;
+			break;
+		case 2 :
+			u.location[1] -= 1;
+			break;
+		case 3 :
+			u.location[0] -= 1;
+			break;
+		};
+		for (Unit unit : this.units) {
+			if (unit.location == u.location && unit.team != u.team) {
+				battle(u, unit, terrain[u.location[0]][u.location[1]]);
+			}
+		}
+	}
+	
 	public void createUnit(Unit u) {
 		this.units.add(u);
 	}
 	
-	public void createUnit(byte men, boolean team, UnitType type, int[] location) {
-		this.units.add(new Unit(men, type, team, this, location[0], location[1]));
-	}
-	
-	public void createUnit(byte men, boolean team, String weapon, String armor, int[] location) {
-		this.units.add(new Unit(men, weapon, armor, team, this, location[0], location[1]));
-	}
-	
 	public void createBuilding(Building b) {
 		this.buildings.add(b);
-	}
-	
-	public void createBuilding () {
-		
 	}
 	
 	public void distaintBattleMorale(boolean team) {
@@ -129,38 +139,20 @@ public class Map {
 	}
 	
 	//this assumes that the units are on opposite teams, and that they are on the same tile
-	public void battle(ArrayList<Unit> a, ArrayList<Unit> b, Terrain t) {
-		double combatPowerA = 1.0;
-		double combatPowerB = 1.0;
-		int armorTotalA = 0;
-		int armorTotalB = 0;
-		double averageArmorA;
-		double averageArmorB;
-		for (Unit u : a) {
-			combatPowerA += u.battlePower(t);
-			armorTotalA += u.type.armorResist;
+	public void battle(Unit a, Unit b, Terrain t) {
+		double Apower = a.battlePower(t);
+		double Bpower = b.battlePower(t);
+		Apower /= b.type.armorResist;
+		Bpower /= a.type.armorResist;
+		if (Apower > Bpower) {
+			a.battleWear(b.battlePower(t), b.type.armorResist);
+			b.die();
+			distaintBattleMorale(a.team);
+		}else if (Bpower > Apower) {
+			b.battleWear(a.battlePower(t), a.type.armorResist);
+			a.die();	
+			distaintBattleMorale(b.team);		
 		}
-		averageArmorA = (armorTotalA * 1.0) / (a.size() * 1.0);
-		for (Unit u : b) {
-			combatPowerB += u.battlePower(t);
-			armorTotalB += u.type.armorResist;
-		}
-		averageArmorB = (armorTotalB * 1.0) / (b.size() * 1.0);
-		combatPowerA /= averageArmorB;
-		combatPowerB /= averageArmorA;
-		if (combatPowerA > combatPowerB)
-			for (Unit u : b)
-				u.die();
-		else if (combatPowerB > combatPowerA)
-			for (Unit u : a)
-				u.die();
-		else{
-			for (Unit u : a)
-				u.die();
-			for (Unit u : b)
-				u.die();
-		}
-			
 	}
 	
 	public String toString() {

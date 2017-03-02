@@ -22,7 +22,7 @@ public class SaveGameScreen implements Screen {
 	Texture prompt;
 	Button yes;
 	Button no;
-	Button backToGame;
+	//Button backToGame;
 
 	public SaveGameScreen(SupplyAndConquer game, Map map, File file) {
 		batch = new SpriteBatch();
@@ -33,7 +33,7 @@ public class SaveGameScreen implements Screen {
 		prompt = new Texture("SaveScreenPrompt.png");
 		yes = new Button(new Texture(Gdx.files.internal("Yes.png")));
 		no = new Button(new Texture(Gdx.files.internal("No.png")));
-		backToGame = new Button(new Texture(Gdx.files.internal("ReturnToGame.png")));
+		//backToGame = new Button(new Texture(Gdx.files.internal("ReturnToGame.png")));
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class SaveGameScreen implements Screen {
 			batch.draw(prompt, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			yes.draw(batch);
 			no.draw(batch);
-			backToGame.draw(batch);
+			//backToGame.draw(batch);
 		}
 		batch.end();
 		if (Gdx.input.justTouched())
@@ -62,7 +62,7 @@ public class SaveGameScreen implements Screen {
 		batch.setProjectionMatrix(cam.combined);
 		yes.modify(width * 3 / 8, height * 6 / 9, width / 4, height / 9, null);
 		no.modify(width * 3 / 8, height * 4 / 9, width / 4, height / 9, null);
-		backToGame.modify(width * 3 / 8, height * 2 / 9, width / 4, height / 9, null);
+		//backToGame.modify(width * 3 / 8, height * 2 / 9, width / 4, height / 9, null);
 	}
 
 	@Override
@@ -94,8 +94,8 @@ public class SaveGameScreen implements Screen {
 			write();
 		if (no.mousedOver())
 			returnToMenu();
-		if (backToGame.mousedOver())
-			returnToGame();
+		//if (backToGame.mousedOver())
+			//returnToGame();
 	}
 
 	public void write() {
