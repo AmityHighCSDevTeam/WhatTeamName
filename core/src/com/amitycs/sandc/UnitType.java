@@ -10,13 +10,13 @@ public class UnitType {
 		this.armor = armor;
 		switch (armor) {
 			case "naked" :
-				armorResist = 0;
+				armorResist = 1;
 				break;
 			case "hide" :
 				armorResist = 2;
 				break;
 			case "metal" :
-				armorResist = 6;
+				armorResist = 5;
 				break;
 			case "cart" :
 				armorResist = -1;

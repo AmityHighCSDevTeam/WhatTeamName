@@ -127,6 +127,41 @@ public class Map {
 		return true;
 	}
 	
+	//this assumes that the units are on opposite teams, and that they are on the same tile
+	public void battle(ArrayList<Unit> a, ArrayList<Unit> b, Terrain t) {
+		double combatPowerA = 1.0;
+		double combatPowerB = 1.0;
+		int armorTotalA = 0;
+		int armorTotalB = 0;
+		double averageArmorA;
+		double averageArmorB;
+		for (Unit u : a) {
+			combatPowerA += u.battlePower(t);
+			armorTotalA += u.type.armorResist;
+		}
+		averageArmorA = (armorTotalA * 1.0) / (a.size() * 1.0);
+		for (Unit u : b) {
+			combatPowerB += u.battlePower(t);
+			armorTotalB += u.type.armorResist;
+		}
+		averageArmorB = (armorTotalB * 1.0) / (b.size() * 1.0);
+		combatPowerA /= averageArmorB;
+		combatPowerB /= averageArmorA;
+		if (combatPowerA > combatPowerB)
+			for (Unit u : b)
+				u.die();
+		else if (combatPowerB > combatPowerA)
+			for (Unit u : a)
+				u.die();
+		else{
+			for (Unit u : a)
+				u.die();
+			for (Unit u : b)
+				u.die();
+		}
+			
+	}
+	
 	public String toString() {
 		String str = "";
 		str += turn + "\n";

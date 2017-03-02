@@ -25,6 +25,7 @@ public class Const {
 			new Terrain("forest", 0.75f, 0.5f, 0.65f, 0.85f, 0.65f)
 	};
 	public static final int[] MAP_SIZE = {256, 128};
+	public static final float[] CAMERA_START_POSITION = {128, 64};
 	public static final float UNIT_MOVEMENT = 10.0f;
 	public static final float MAN_FOOD_CONSUMPTION = 0.1f;
 	public static final float EQUIPMENT_WEAR_FACTOR = 0.01f;
@@ -42,7 +43,9 @@ public class Const {
 	public static final float CASTLE_SIEGE_HEALTH = 10.0f;
 	public static final float CASTLE_HEALING_FACTOR = 0.25f;
 	public static final float CASTLE_SIEGE_RATE = 1.25f;
+	public static final float CAMERA_MOVE_SPEED = 1.0f;
 	public static final int BARACKS_CAPACITY = 75;
 	public static final int CHARACTER_HEIGHT = 50; //for font
 	public static final int CHARACTER_WIDTH = 30;
+	public static final int TILE_SIZE = 32; //the number of pixels each quare tile occupies
 }

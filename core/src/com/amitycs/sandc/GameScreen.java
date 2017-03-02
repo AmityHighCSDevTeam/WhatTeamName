@@ -16,6 +16,13 @@ public class GameScreen implements Screen{
 	SpriteBatch batch;
 	Button exitButton;
 	Map map;
+	float[] cameraLocation; //[0] is x, [1] is y marks the center of the view
+							//measured in terms of tiles
+	
+	Texture[][] units; // first array is team, 0 = blu 1 = red
+						// inner array is unit type, numbered like in Const
+	Texture[] armor; // 0 = none, 1 = leather, 2 = metal
+	
 	
 	public GameScreen (SupplyAndConquer game, File file) {
 		this.game = game;
@@ -27,7 +34,16 @@ public class GameScreen implements Screen{
 			game.setScreen(new FailedToFindFileScreen(game));
 		}
 		exitButton = new Button(new Texture(Gdx.files.internal("ExitGame.png")));
-		//exitButton = new Button(new Texture(Gdx.files.internal()));
+		cameraLocation = Const.CAMERA_START_POSITION;
+	}
+	
+	public GameScreen(SupplyAndConquer game, Map map) {
+		this.game = game;
+		this.map = map;
+		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
+		batch = new SpriteBatch();
+		exitButton = new Button(new Texture(Gdx.files.internal("ExitGame.png")));
+		cameraLocation = Const.CAMERA_START_POSITION;
 	}
 
 	@Override
@@ -41,15 +57,26 @@ public class GameScreen implements Screen{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();{
 			
+			exitButton.draw(batch);
 		}batch.end();
 		if (Gdx.input.justTouched()) clickEvents();
+		if (Gdx.input.isButtonPressed(19)) cameraLocation[1] += Const.CAMERA_MOVE_SPEED * delta;
+		if (Gdx.input.isButtonPressed(20)) cameraLocation[1] -= Const.CAMERA_MOVE_SPEED * delta;
+		if (Gdx.input.isButtonPressed(21)) cameraLocation[0] -= Const.CAMERA_MOVE_SPEED * delta;
+		if (Gdx.input.isButtonPressed(22)) cameraLocation[0] += Const.CAMERA_MOVE_SPEED * delta;
+		
+		if (cameraLocation[0] < 0) cameraLocation[0] = 0;
+		if (cameraLocation[0] > Const.MAP_SIZE[0]) cameraLocation[0] = Const.MAP_SIZE[0];
+		if (cameraLocation[1] < 0) cameraLocation[1] = 0;
+		if (cameraLocation[1] > Const.MAP_SIZE[1]) cameraLocation[1] = Const.MAP_SIZE[1];
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		cam.setToOrtho(false, width, height);
 		batch.setProjectionMatrix(cam.combined);
-		
+		exitButton.modifyPos(width - width / 6, height - height / 6);
+		exitButton.modifySize(width / 6, height / 6);
 	}
 
 	@Override
@@ -97,8 +124,4 @@ public class GameScreen implements Screen{
 		}
 	}
 	
-	public int smithProductionSelect() {
-		//do things later
-		return -1;
-	}
 }
